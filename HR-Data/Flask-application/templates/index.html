@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Search</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Search for Candidate </h1><br>
+    <form id="lookupForm" method="POST">
+        <label for="Candidate_Ref">Enter Candidate Reference:</label>
+        <input type="text" id="Candidate_Ref" name="Candidate_Ref" required>
+        <button type="submit">Search</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('lookupForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var form = event.target;
+            var data = new FormData(form);
+
+            fetch('/get_candidate', {
+                method: 'POST',
+                body: data
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                var resultDiv = document.getElementById('result');
+                if (data.error) {
+                    resultDiv.innerHTML = `<p style="color: red;">${data.error}</p>`;
+                } else {
+                    // Create a new object with 'name' first if it exists
+                    let sortedData = {};
+                    if ('name' in data) {
+                        sortedData['name'] = data['name'];
+                    }
+                    // Add all other properties maintaining the order
+                    for (const [key, value] of Object.entries(data)) {
+                        if (key !== 'name') {
+                            sortedData[key] = value;
+                        }
+                    }
+                    
+                    // Build the table from sortedData
+                    var table = '<table>';
+                    for (const [key, value] of Object.entries(sortedData)) {
+                        table += `<tr><th>${key}</th><td>${value}</td></tr>`;
+                    }
+                    table += '</table>';
+                    resultDiv.innerHTML = table;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('result').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            });
+        });
+    </script>
+</body>
+</html>

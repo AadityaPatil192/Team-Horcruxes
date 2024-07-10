@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Queries</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Candidate Queries</h1>
+        <select id="queryDropdown" onchange="fetchData()">
+            <option value="">Select a query</option>
+            <option value="query_a">Accepted Offer & Relocate</option>
+            <option value="query_b">Accepted or Yet to Accept within 10 days</option>
+            <option value="query_c">Willing to Join with 25% Hike</option>
+            <option value="query_d">Willing to Join, 25% Hike, Relocate, Bonus</option>
+            <option value="query_e">Count by Source, Joined, Declined</option>
+        </select>
+        <div id="result"></div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

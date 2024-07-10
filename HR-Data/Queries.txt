@@ -1,0 +1,57 @@
+Query1 :
+
+db.details.find({
+    "DOJ_Extended": "Yes",
+    "Duration_to_accept_offer": { $lt: 30 },
+    "Candidate_relocate_actual": "Yes"
+});
+
+
+Query2 :
+
+db.details.find({
+    $or: [
+        { "DOJ_Extended": "Yes" },
+        { "DOJ_Extended": "No", "Duration_to_accept_offer": { $lt: 10 } }
+    ]
+});
+
+
+Query3 :
+
+db.details.find({
+    "DOJ_Extended": "Yes",
+    "Percent_hike_offered_in_CTC": { $gte: 25 }
+});
+
+
+Query4 :
+
+db.details.find({
+    "DOJ_Extended": "Yes",
+    "Percent_hike_offered_in_CTC": { $gte: 25 },
+    "Duration_to_accept_offer": { $lt: 30 },
+    "Candidate_relocate_actual": "Yes",
+    "Joining_Bonus": "Yes"
+});
+
+Query5 :
+
+db.details.aggregate([
+    {
+        $group: {
+            _id: "$Candidate_Source",
+            totalHired: { $sum: 1 },
+            totalJoined: { 
+                $sum: { 
+                    $cond: [{ $eq: ["$Status", "Joined"] }, 1, 0]
+                }
+            },
+            totalDeclined: { 
+                $sum: { 
+                    $cond: [{ $eq: ["$Status", "Declined"] }, 1, 0]
+                }
+            }
+        }
+    }
+]);
