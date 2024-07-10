@@ -49,7 +49,10 @@ Deployed the Flask application on AWS:
 - Enabled searching for candidates.
 - Displayed search results effectively.
 - Created s3 Bucket then uploaded csv file in the bucket.
-- 
+- Created role in Iam role service and provided permissions.
+- Then migrated in EC2 instance.
+- then configured aws with access key and secured access key in cloudshell.
+- then created flask application there.
 
 ## Power BI Dashboard
 Developed a Power BI dashboard to visualize key metrics and insights derived from the HR dataset.
